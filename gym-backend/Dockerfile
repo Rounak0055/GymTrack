@@ -1,19 +1,16 @@
-# Stage 1: Build with Maven (Java 17)
-FROM maven:3.9-eclipse-temurin-17 AS build
+# Use Maven + Java image to build
+FROM maven:3.9.6-eclipse-temurin-17 AS build
+
 WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
 
-COPY pom.xml .
-COPY mvnw .
-COPY .mvn .mvn
-COPY src ./src
+# Use lightweight Java runtime
+FROM eclipse-temurin:17-jdk-alpine
 
-RUN chmod +x mvnw && ./mvnw clean package -DskipTests
-
-# Stage 2: Run the Spring Boot JAR
-FROM eclipse-temurin:17-jre
 WORKDIR /app
-
-COPY --from=build /app/target/gym-backend.jar app.jar
+COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+
+CMD ["java", "-jar", "app.jar"]
