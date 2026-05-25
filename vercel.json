@@ -1,0 +1,5 @@
+{
+  "framework": "create-react-app",
+  "buildCommand": "cd gym-frontend/gym-frontend && npm install && npm run build",
+  "outputDirectory": "gym-frontend/gym-frontend/build"
+}
