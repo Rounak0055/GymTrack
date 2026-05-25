@@ -105,15 +105,18 @@ In Netlify dashboard:
 
 ### Option B: Deploy to Render
 
-1. Go to https://render.com
-2. Sign up
-3. Create Web Service
-4. Connect GitHub
-5. Configure:
-   - Runtime: Java
-   - Build command: `mvn clean install`
-   - Start command: `java -jar target/gym-backend-0.0.1-SNAPSHOT.jar`
-   - Environment: Database URL
+**Important:** Render has no native Java runtime. Use **Docker** and **Root Directory `gym-backend`**.
+
+See the full guide: **[RENDER_DEPLOY.md](./RENDER_DEPLOY.md)**
+
+Quick settings:
+
+| Setting | Value |
+|---------|--------|
+| Root Directory | `gym-backend` |
+| Runtime | **Docker** |
+| Build / Start commands | *(empty — uses `gym-backend/Dockerfile`)* |
+| Env vars | `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, `SPRING_DATASOURCE_PASSWORD`, `SPRING_PROFILES_ACTIVE=prod` |
 
 ### Option C: Deploy to Heroku (Requires Card)
 

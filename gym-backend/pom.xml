@@ -66,12 +66,20 @@
     </dependencies>
 
     <build>
+        <finalName>gym-backend</finalName>
         <plugins>
 
             <!-- SPRING BOOT RUN -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <!-- COMPILER (for Lombok) -->

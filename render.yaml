@@ -1,0 +1,24 @@
+# Render Blueprint — deploy backend only (Java via Docker)
+# Docs: https://render.com/docs/blueprint-spec
+#
+# Render does NOT support native Java/Maven. Use runtime: docker so Maven runs
+# inside the image build. Set Root Directory to gym-backend in the dashboard
+# if you create the service manually instead of using this blueprint.
+
+services:
+  - type: web
+    name: gymtrack-api
+    runtime: docker
+    rootDir: gym-backend
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /exercise/all
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: SPRING_DATASOURCE_URL
+        sync: false
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
