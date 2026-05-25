@@ -1,0 +1,63 @@
+### 1️⃣ ADD USER
+POST http://localhost:8080/users/add
+Content-Type: application/json
+
+{
+  "name": "Rounak",
+  "email": "rounak@gmail.com",
+  "password": "1234"
+}
+
+###
+
+### 2️⃣ ADD EXERCISE
+POST http://localhost:8080/exercise/add
+Content-Type: application/json
+
+{
+  "name": "Bench Press",
+  "muscleGroup": "Chest"
+}
+
+###
+
+### 3️⃣ GET ALL EXERCISES
+GET http://localhost:8080/exercise/all
+
+###
+
+### 4️⃣ GET EXERCISE BY MUSCLE
+GET http://localhost:8080/exercise/muscle/Chest
+
+###
+
+### 5️⃣ CREATE WORKOUT (User ID = 1)
+POST http://localhost:8080/workout/create/1
+Content-Type: application/json
+
+{
+  "day": "Chest Day"
+}
+
+###
+
+### 6️⃣ ADD WORKOUT ENTRY
+### (Workout ID = 1, Exercise ID = 1)
+POST http://localhost:8080/entry/add/1/1
+Content-Type: application/json
+
+{
+  "sets": 3,
+  "reps": 10,
+  "weight": 80
+}
+
+###
+
+### 7️⃣ GET ALL WORKOUTS (BASIC)
+GET http://localhost:8080/workout/all
+
+###
+
+### 8️⃣ GET FULL DETAILS (DTO OUTPUT 🔥)
+GET http://localhost:8080/workout/details
