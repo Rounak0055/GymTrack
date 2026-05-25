@@ -19,11 +19,10 @@ GymTrack/                    ← Git repo root
 │   ├── Dockerfile
 │   ├── mvnw
 │   └── src/
-├── gym-frontend/
-│   ├── package.json         ← partial deps (ignore for deploy)
-│   └── gym-frontend/        ← React app (CRA) — deploy on Vercel/Netlify/Render Static
-│       ├── package.json
-│       └── src/
+├── gym-frontend/            ← React app (CRA) — deploy on Vercel/Netlify/Render Static
+│   ├── package.json
+│   ├── src/
+│   └── public/
 └── render.yaml              ← optional Blueprint (backend)
 ```
 
@@ -32,7 +31,7 @@ Equivalent clean layout (optional rename later):
 | Current           | Suggested alias |
 |-------------------|-----------------|
 | `gym-backend/`    | `backend/`      |
-| `gym-frontend/gym-frontend/` | `frontend/` |
+| `gym-frontend/` | `frontend/` |
 
 Renaming is optional; Render only needs **Root Directory = `gym-backend`**.
 
@@ -106,14 +105,14 @@ Do **not** deploy the React app as the same Java service.
 
 | Setting | Value |
 |---------|--------|
-| **Root Directory** | `gym-frontend/gym-frontend` |
+| **Root Directory** | `gym-frontend` |
 | **Build Command** | `npm install && npm run build` |
 | **Publish Directory** | `build` |
 | **Environment** | `REACT_APP_API_URL=https://YOUR-SERVICE.onrender.com` |
 
 ### Vercel / Netlify (also fine)
 
-- Root: `gym-frontend/gym-frontend`
+- Root: `gym-frontend`
 - Build: `npm run build`
 - Output: `build`
 - Env: `REACT_APP_API_URL=https://YOUR-SERVICE.onrender.com`

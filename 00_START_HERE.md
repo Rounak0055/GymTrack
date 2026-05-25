@@ -47,7 +47,7 @@ A **complete, production-ready React frontend** for GymTrack gym workout tracker
 
 ### Step 1: Install Dependencies
 ```bash
-cd gym-frontend/gym-frontend
+cd gym-frontend
 npm install
 ```
 
@@ -60,7 +60,7 @@ Wait for: `Tomcat started on port(s): 8080`
 
 ### Step 3: Start Frontend
 ```bash
-cd gym-frontend/gym-frontend
+cd gym-frontend
 npm start
 ```
 Opens: http://localhost:3000
@@ -257,7 +257,7 @@ gym-frontend/
 - Mac/Linux: Check with `lsof -i :3000`
 
 **Module not found?**
-- Run `npm install` in gym-frontend/gym-frontend
+- Run `npm install` in gym-frontend
 
 ---
 

@@ -3,8 +3,7 @@ gym-backend/target/
 
 # Frontend
 gym-frontend/node_modules/
-gym-frontend/gym-frontend/node_modules/
-gym-frontend/gym-frontend/build/
+gym-frontend/build/
 
 # Local secrets (never commit)
 gym-backend/src/main/resources/application-local.properties

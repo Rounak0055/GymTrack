@@ -19,7 +19,7 @@ Complete guide to deploy GymTrack to the cloud.
 
 ### Step 1: Create Production Build
 ```bash
-cd gym-frontend/gym-frontend
+cd gym-frontend
 npm run build
 ```
 
@@ -66,7 +66,7 @@ https://gymtrack.vercel.app
 
 ### Step 1: Build Frontend
 ```bash
-cd gym-frontend/gym-frontend
+cd gym-frontend
 npm run build
 ```
 
@@ -174,7 +174,7 @@ spring.datasource.password=your-password
 
 ### 4. Deploy Frontend
 ```bash
-cd gym-frontend/gym-frontend
+cd gym-frontend
 npm run build
 vercel --prod
 ```

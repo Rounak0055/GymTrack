@@ -6,7 +6,7 @@ Full-stack workout tracker: Spring Boot API + React frontend.
 
 ```
 gym-backend/              Spring Boot API (deploy to Render with Docker)
-gym-frontend/gym-frontend/  React app (deploy to Vercel, Netlify, or Render Static)
+gym-frontend/              React app (deploy to Vercel, Netlify, or Render Static)
 ```
 
 ## Quick start (local)
@@ -23,7 +23,7 @@ cp src/main/resources/application-local.properties.example src/main/resources/ap
 **Frontend**
 
 ```bash
-cd gym-frontend/gym-frontend
+cd gym-frontend
 npm install
 npm start
 ```
