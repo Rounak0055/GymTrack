@@ -3,7 +3,7 @@ services:
     name: gymtrack-api
     runtime: docker
     rootDir: gym-backend
-    dockerfilePath: ./gym-backend/Dockerfile   # ✅ FIXED
+    dockerfilePath: ./Dockerfile ✅
     plan: free
     healthCheckPath: /exercise/all
     envVars:
