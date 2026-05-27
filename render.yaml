@@ -5,7 +5,7 @@ services:
     dockerfilePath: gym-backend/Dockerfile
     dockerContext: gym-backend
     plan: free
-    healthCheckPath: /exercise/all
+    healthCheckPath: 
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
