@@ -4,7 +4,7 @@ import com.gym.backend.entity.Exercise;
 import com.gym.backend.repository.ExerciseRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import java.lang.reflect.Field;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,54 +18,111 @@ public class DataSeeder implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         if (exerciseRepository.count() == 0) {
             List<Exercise> defaultExercises = new ArrayList<>();
 
-            defaultExercises.add(createExerciseInstance("Barbell Bench Press", "Chest"));
-            defaultExercises.add(createExerciseInstance("Barbell Back Squat", "Legs"));
-            defaultExercises.add(createExerciseInstance("Dumbbell Hammer Curl", "Arms"));
-            defaultExercises.add(createExerciseInstance("Wide-Grip Lat Pulldown", "Back"));
-            defaultExercises.add(createExerciseInstance("Overhead Barbell Press", "Shoulders"));
+            // Base staples
+            addExercises(defaultExercises, "Chest",
+                    "Barbell Bench Press");
+            addExercises(defaultExercises, "Back",
+                    "Wide-Grip Lat Pulldown");
+            addExercises(defaultExercises, "Legs",
+                    "Barbell Back Squat");
+            addExercises(defaultExercises, "Shoulders",
+                    "Overhead Barbell Press");
+            addExercises(defaultExercises, "Arms",
+                    "Dumbbell Hammer Curl");
+
+            // 1. CHEST (additional variations)
+            addExercises(defaultExercises, "Chest",
+                    "Incline Dumbbell Flyes",
+                    "Cable Flyes (Low-to-High)",
+                    "Hammer Strength Chest Press",
+                    "Landmine Press",
+                    "Decline Dumbbell Press",
+                    "Floor Press (Barbell)",
+                    "Deficit Push-ups",
+                    "Svend Press");
+
+            // 2. BACK (additional variations)
+            addExercises(defaultExercises, "Back",
+                    "Rack Pulls",
+                    "Meadows Row",
+                    "Lat Pulldown (Close Grip V-Bar)",
+                    "Lat Pulldown (Underhand Grip)",
+                    "Straight-Arm Cable Pulldown",
+                    "Dumbbell Pullover",
+                    "Chest-Supported Dumbbell Row",
+                    "Inverted Rows",
+                    "Renegade Rows");
+
+            // 3. LEGS & LOWER BODY (additional variations)
+            addExercises(defaultExercises, "Legs",
+                    "Hack Squat",
+                    "Leg Press (Single Leg)",
+                    "Sumo Deadlift",
+                    "Zercher Squat",
+                    "Split Squats (Dumbbell)",
+                    "Hip Thrusts (Barbell)",
+                    "Cable Pull-Throughs",
+                    "Step-ups (Weighted)",
+                    "Seated Hamstring Curl");
+
+            // 4. SHOULDERS & TRAPS (additional variations)
+            addExercises(defaultExercises, "Shoulders",
+                    "Seated Barbell Overhead Press",
+                    "Dumbbell Incline Rear Delt Row",
+                    "Face Pulls with Rope",
+                    "Upright Rows (Barbell or Cable)",
+                    "Behind-the-Back Shrugs",
+                    "Lu Raises",
+                    "Y-Raises");
+
+            // 5. BICEPS (additional variations)
+            addExercises(defaultExercises, "Biceps",
+                    "Concentration Curls",
+                    "Cable Bicep Curls (Straight Bar)",
+                    "Cable Bicep Curls (Rope Dual)",
+                    "Spider Curls",
+                    "Zottman Curls",
+                    "Drag Curls",
+                    "Plate Curls");
+
+            // 6. TRICEPS (additional variations)
+            addExercises(defaultExercises, "Triceps",
+                    "Bench Dips (Weighted)",
+                    "Triceps Kickbacks (Dumbbell)",
+                    "Cable Overhead Triceps Extension (Rope)",
+                    "Single-Arm Cable Pushdown",
+                    "Diamond Push-ups");
+
+            // 7. CORE, FOREARMS & CARDIO / FUNCTIONAL
+            addExercises(defaultExercises, "Core",
+                    "Hanging Knee Raises",
+                    "Decline Sit-ups (Weighted)",
+                    "Dragon Flags");
+            addExercises(defaultExercises, "Forearms",
+                    "Wrist Curls (Barbell)",
+                    "Reverse Wrist Curls");
+            addExercises(defaultExercises, "Cardio",
+                    "Farmer's Walk",
+                    "Kettlebell Swings",
+                    "Medicine Ball Slams",
+                    "Burpees");
 
             exerciseRepository.saveAll(defaultExercises);
-            System.out.println("🎉 Database successfully populated with base gym exercises!");
+            System.out.println("Database seeded with " + defaultExercises.size() + " exercises.");
         }
     }
 
-    // Direct helper method to bypass Lombok setter issues entirely
-    private Exercise createExerciseInstance(String name, String muscleGroup) {
-        try {
-            Exercise exercise = Exercise.class.getDeclaredConstructor().newInstance();
-            
-            // Set name field directly bypassing setters
-            Field nameField = Exercise.class.getDeclaredField("name");
-            nameField.setAccessible(true);
-            nameField.set(exercise, name);
-
-            // Set muscleGroup field directly bypassing setters
-            Field mgField = Exercise.class.getDeclaredField("muscleGroup");
-            mgField.setAccessible(true);
-            mgField.set(exercise, muscleGroup);
-
-            return exercise;
-        } catch (NoSuchFieldException e) {
-            // Fallback check: try lowercase muscle_group naming style if camelCase isn't found
-            try {
-                Exercise exercise = Exercise.class.getDeclaredConstructor().newInstance();
-                Field nameField = Exercise.class.getDeclaredField("name");
-                nameField.setAccessible(true);
-                nameField.set(exercise, name);
-
-                Field mgField = Exercise.class.getDeclaredField("muscle_group");
-                mgField.setAccessible(true);
-                mgField.set(exercise, muscleGroup);
-                return exercise;
-            } catch (Exception ex) {
-                throw new RuntimeException("Could not seed data due to field naming mismatch", ex);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("Failed creating exercise entity record", e);
+    private void addExercises(List<Exercise> target, String muscleGroup, String... names) {
+        for (String name : names) {
+            target.add(createExerciseInstance(name, muscleGroup));
         }
+    }
+
+    private Exercise createExerciseInstance(String name, String muscleGroup) {
+        return new Exercise(name, muscleGroup);
     }
 }
