@@ -39,9 +39,9 @@ public class DataSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        workoutLogRepository.deleteAll();
-        workoutPlanRepository.deleteAll();
-        exerciseRepository.deleteAll();
+        // workoutLogRepository.deleteAll();
+        // workoutPlanRepository.deleteAll();
+        // exerciseRepository.deleteAll();
 
         if (exerciseRepository.count() == 0) {
             List<Exercise> defaultExercises = new ArrayList<>();
