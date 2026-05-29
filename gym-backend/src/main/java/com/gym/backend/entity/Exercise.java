@@ -22,6 +22,8 @@ public class Exercise {
     public String getMuscleGroup() { return muscleGroup; }
     public void setMuscleGroup(String muscleGroup) { this.muscleGroup = muscleGroup; }
 
+    public Exercise() {}
+
     public Exercise(String name, String muscleGroup) {
     this.name = name;
     this.muscleGroup = muscleGroup;
