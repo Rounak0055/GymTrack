@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import API from "../services/api";
 
+const MUSCLE_GROUPS = [
+  "Chest", "Back", "Legs", "Shoulders", "Biceps", "Triceps", "Core", "Forearms", "Cardio"
+];
+
 function TodayWorkout({ userId, onNavigate }) {
   const [isLogged, setIsLogged] = useState(false);
   const [logId, setLogId] = useState(null);
@@ -66,7 +70,7 @@ function TodayWorkout({ userId, onNavigate }) {
         setLogEntries(res.data.log.entries.map((e) => ({
           exerciseId: e.exerciseId,
           exerciseName: e.exerciseName,
-          muscleGroup: e.muscleGroup,
+          muscleGroup: e.muscleGroup || "",
           actualSets: e.actualSets,
           actualReps: e.actualReps,
           weight: e.weight
@@ -81,7 +85,7 @@ function TodayWorkout({ userId, onNavigate }) {
           setLogEntries(res.data.template.exercises.map((we) => ({
             exerciseId: we.exerciseId,
             exerciseName: we.exerciseName,
-            muscleGroup: we.muscleGroup,
+            muscleGroup: we.muscleGroup || "",
             actualSets: "",
             actualReps: "",
             weight: ""
@@ -110,7 +114,7 @@ function TodayWorkout({ userId, onNavigate }) {
       setLogEntries(plan.exercises.map((we) => ({
         exerciseId: we.exerciseId,
         exerciseName: we.exerciseName,
-        muscleGroup: we.muscleGroup,
+        muscleGroup: we.muscleGroup || "",
         actualSets: "",
         actualReps: "",
         weight: ""
@@ -123,8 +127,14 @@ function TodayWorkout({ userId, onNavigate }) {
   const handleAddExerciseRow = () => {
     setLogEntries([
       ...logEntries,
-      { exerciseId: "", actualSets: "", actualReps: "", weight: "" }
+      { exerciseId: "", muscleGroup: "", actualSets: "", actualReps: "", weight: "" }
     ]);
+  };
+
+  const handleUpdateMuscleGroup = (idx, muscleGroup) => {
+    const updated = [...logEntries];
+    updated[idx] = { ...updated[idx], muscleGroup, exerciseId: "" };
+    setLogEntries(updated);
   };
 
   const handleUpdateEntryRow = (idx, field, value) => {
@@ -135,6 +145,11 @@ function TodayWorkout({ userId, onNavigate }) {
 
   const handleRemoveEntryRow = (idx) => {
     setLogEntries(logEntries.filter((_, i) => i !== idx));
+  };
+
+  const getFilteredExercises = (muscleGroup) => {
+    if (!muscleGroup) return [];
+    return availableExercises.filter((ex) => ex.muscleGroup === muscleGroup);
   };
 
   const handleSubmitWorkout = async (e) => {
@@ -260,7 +275,8 @@ function TodayWorkout({ userId, onNavigate }) {
                 </div>
               ) : (
                 <>
-                  <div className="log-table-headers">
+                  <div className="log-table-headers log-table-headers--dual">
+                    <span>Muscle Group</span>
                     <span>Exercise</span>
                     <span>Actual Sets</span>
                     <span>Actual Reps</span>
@@ -269,18 +285,35 @@ function TodayWorkout({ userId, onNavigate }) {
                   </div>
 
                   {logEntries.map((entry, idx) => (
-                    <div key={idx} className="log-entry-row">
+                    <div key={idx} className="log-entry-row log-entry-row--dual">
+                      {/* Dropdown A: Muscle Group */}
+                      <select
+                        value={entry.muscleGroup || ""}
+                        onChange={(e) => handleUpdateMuscleGroup(idx, e.target.value)}
+                        disabled={saving}
+                        className="select-muscle-group"
+                      >
+                        <option value="">Select Muscle Group</option>
+                        {MUSCLE_GROUPS.map((mg) => (
+                          <option key={mg} value={mg}>{mg}</option>
+                        ))}
+                      </select>
+
+                      {/* Dropdown B: Exercise (dependent on Muscle Group) */}
                       <select
                         value={entry.exerciseId}
                         onChange={(e) =>
                           handleUpdateEntryRow(idx, "exerciseId", e.target.value)
                         }
-                        disabled={saving}
+                        disabled={saving || !entry.muscleGroup}
+                        className={!entry.muscleGroup ? "select-disabled" : ""}
                       >
-                        <option value="">Select Exercise</option>
-                        {availableExercises.map((ex) => (
+                        <option value="">
+                          {entry.muscleGroup ? "Select Exercise" : "— Pick muscle group first —"}
+                        </option>
+                        {getFilteredExercises(entry.muscleGroup).map((ex) => (
                           <option key={ex.id} value={ex.id}>
-                            {ex.name} ({ex.muscleGroup})
+                            {ex.name}
                           </option>
                         ))}
                       </select>

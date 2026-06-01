@@ -8,4 +8,4 @@ services:
     healthCheckPath: 
     envVars:
       - key: SPRING_PROFILES_ACTIVE
-        value: prod
+        value: prods

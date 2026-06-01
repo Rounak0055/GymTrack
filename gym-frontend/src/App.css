@@ -1192,3 +1192,74 @@ body {
   }
 }
 
+/* ✅ Dual-Dropdown (Muscle Group → Exercise) Layout */
+.exercise-headers--dual {
+  grid-template-columns: 1fr 1fr 80px;
+}
+
+.planned-exercise-row--dual {
+  grid-template-columns: 1fr 1fr 80px;
+}
+
+.log-table-headers--dual {
+  grid-template-columns: 1fr 1.5fr 0.7fr 0.7fr 0.7fr 80px;
+}
+
+.log-entry-row--dual {
+  grid-template-columns: 1fr 1.5fr 0.7fr 0.7fr 0.7fr 80px;
+}
+
+.exercise-select--dual {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.exercise-entry--dual {
+  grid-template-columns: 1fr 200px 100px;
+}
+
+.exercise-entry--dual .exercise-select--dual {
+  grid-column: 1 / 2;
+}
+
+.select-muscle-group {
+  border-left: 3px solid #764ba2 !important;
+}
+
+.select-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #f5f5f5 !important;
+}
+
+/* ✅ Responsive overrides for dual-dropdown layout */
+@media (max-width: 768px) {
+  .exercise-headers--dual {
+    display: none;
+  }
+
+  .log-table-headers--dual {
+    display: none;
+  }
+
+  .planned-exercise-row--dual {
+    grid-template-columns: 1fr;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 15px;
+  }
+
+  .log-entry-row--dual {
+    grid-template-columns: 1fr;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 15px;
+  }
+
+  .exercise-select--dual {
+    grid-template-columns: 1fr;
+  }
+
+  .exercise-entry--dual {
+    grid-template-columns: 1fr;
+  }
+}

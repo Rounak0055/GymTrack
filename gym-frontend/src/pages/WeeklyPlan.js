@@ -5,6 +5,10 @@ const DAYS_OF_WEEK = [
   "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"
 ];
 
+const MUSCLE_GROUPS = [
+  "Chest", "Back", "Legs", "Shoulders", "Biceps", "Triceps", "Core", "Forearms", "Cardio"
+];
+
 function WeeklyPlan({ userId }) {
   const [selectedDay, setSelectedDay] = useState("MONDAY");
   const [allPlans, setAllPlans] = useState({});
@@ -27,14 +31,24 @@ function WeeklyPlan({ userId }) {
     const activePlan = allPlans[selectedDay];
     if (activePlan) {
       setDayPlanName(activePlan.name || "");
-      setPlannedExercises(activePlan.exercises || []);
+      // Derive muscleGroup for each row from available exercises
+      const exercises = (activePlan.exercises || []).map((ex) => {
+        const matched = availableExercises.find(
+          (a) => String(a.id) === String(ex.exerciseId)
+        );
+        return {
+          ...ex,
+          muscleGroup: matched ? matched.muscleGroup : ""
+        };
+      });
+      setPlannedExercises(exercises);
     } else {
       setDayPlanName("");
       setPlannedExercises([]);
     }
     setMessage("");
     setError("");
-  }, [selectedDay, allPlans]);
+  }, [selectedDay, allPlans, availableExercises]);
 
   const fetchAvailableExercises = async () => {
     try {
@@ -64,8 +78,14 @@ function WeeklyPlan({ userId }) {
   const handleAddExerciseRow = () => {
     setPlannedExercises([
       ...plannedExercises,
-      { exerciseId: "" }
+      { exerciseId: "", muscleGroup: "" }
     ]);
+  };
+
+  const handleUpdateMuscleGroup = (idx, muscleGroup) => {
+    const updated = [...plannedExercises];
+    updated[idx] = { ...updated[idx], muscleGroup, exerciseId: "" };
+    setPlannedExercises(updated);
   };
 
   const handleUpdateExerciseRow = (idx, field, value) => {
@@ -76,6 +96,11 @@ function WeeklyPlan({ userId }) {
 
   const handleRemoveExerciseRow = (idx) => {
     setPlannedExercises(plannedExercises.filter((_, i) => i !== idx));
+  };
+
+  const getFilteredExercises = (muscleGroup) => {
+    if (!muscleGroup) return [];
+    return availableExercises.filter((ex) => ex.muscleGroup === muscleGroup);
   };
 
   const handleSavePlan = async (e) => {
@@ -176,24 +201,42 @@ function WeeklyPlan({ userId }) {
               </div>
             ) : (
               <>
-                <div className="exercise-headers">
+                <div className="exercise-headers exercise-headers--dual">
+                  <span>Muscle Group</span>
                   <span>Exercise</span>
                   <span>Action</span>
                 </div>
 
                 {plannedExercises.map((entry, idx) => (
-                  <div key={idx} className="planned-exercise-row">
+                  <div key={idx} className="planned-exercise-row planned-exercise-row--dual">
+                    {/* Dropdown A: Muscle Group */}
+                    <select
+                      value={entry.muscleGroup || ""}
+                      onChange={(e) => handleUpdateMuscleGroup(idx, e.target.value)}
+                      disabled={loading}
+                      className="select-muscle-group"
+                    >
+                      <option value="">Select Muscle Group</option>
+                      {MUSCLE_GROUPS.map((mg) => (
+                        <option key={mg} value={mg}>{mg}</option>
+                      ))}
+                    </select>
+
+                    {/* Dropdown B: Exercise (dependent on Muscle Group) */}
                     <select
                       value={entry.exerciseId}
                       onChange={(e) =>
                         handleUpdateExerciseRow(idx, "exerciseId", e.target.value)
                       }
-                      disabled={loading}
+                      disabled={loading || !entry.muscleGroup}
+                      className={!entry.muscleGroup ? "select-disabled" : ""}
                     >
-                      <option value="">Select Exercise</option>
-                      {availableExercises.map((ex) => (
+                      <option value="">
+                        {entry.muscleGroup ? "Select Exercise" : "— Pick muscle group first —"}
+                      </option>
+                      {getFilteredExercises(entry.muscleGroup).map((ex) => (
                         <option key={ex.id} value={ex.id}>
-                          {ex.name} ({ex.muscleGroup})
+                          {ex.name}
                         </option>
                       ))}
                     </select>

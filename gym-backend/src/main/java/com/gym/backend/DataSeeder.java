@@ -149,6 +149,44 @@ public class DataSeeder implements CommandLineRunner {
                     "Medicine Ball Slams",
                     "Burpees");
 
+            // 8. BIOMECHANICALLY OPTIMIZED ADDITIONS
+            addExercises(defaultExercises, "Chest",
+                    "Machine Chest Press",
+                    "Incline Smith Press",
+                    "Pec Deck Fly",
+                    "Incline Machine Press",
+                    "Cable Fly");
+            addExercises(defaultExercises, "Back",
+                    "Chest Supported T-Bar Row",
+                    "Neutral Grip Lat Pulldown",
+                    "Machine High Row",
+                    "Cable Pullover",
+                    "Chest Supported Row",
+                    "Single Arm Cable Pulldown");
+            addExercises(defaultExercises, "Legs",
+                    "Pendulum Squat / Leg Press",
+                    "Leg Extension",
+                    "Seated Leg Curl",
+                    "Lying Leg Curl",
+                    "Smith Machine RDL",
+                    "Seated Calf Raise",
+                    "Leg Press Calf Press",
+                    "Smith Split Squat",
+                    "Smith RDL",
+                    "Hip Thrust Machine",
+                    "Standing Calf Machine");
+            addExercises(defaultExercises, "Shoulders",
+                    "Machine Shoulder Press",
+                    "Cable Lateral Raise",
+                    "Machine Lateral Raise");
+            addExercises(defaultExercises, "Biceps",
+                    "Bayesian Cable Curl",
+                    "Preacher Curl Machine",
+                    "Cable Curl");
+            addExercises(defaultExercises, "Triceps",
+                    "Cable Pushdown",
+                    "Rope Pushdown");
+
             exerciseRepository.saveAll(defaultExercises);
             System.out.println("Database seeded with " + defaultExercises.size() + " exercises.");
         }

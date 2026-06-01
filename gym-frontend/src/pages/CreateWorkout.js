@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import API from "../services/api";
 
+const MUSCLE_GROUPS = [
+  "Chest", "Back", "Legs", "Shoulders", "Biceps", "Triceps", "Core", "Forearms", "Cardio"
+];
+
 function CreateWorkout({ userId, onWorkoutCreated, onCancel }) {
   const [day, setDay] = useState("");
   const [exercises, setExercises] = useState([]);
@@ -29,8 +33,14 @@ function CreateWorkout({ userId, onWorkoutCreated, onCancel }) {
   const addExerciseEntry = () => {
     setSelectedExercises([
       ...selectedExercises,
-      { exerciseId: "", sets: 3, reps: 10, weight: 0 },
+      { exerciseId: "", muscleGroup: "", sets: 3, reps: 10, weight: 0 },
     ]);
+  };
+
+  const handleUpdateMuscleGroup = (idx, muscleGroup) => {
+    const updated = [...selectedExercises];
+    updated[idx] = { ...updated[idx], muscleGroup, exerciseId: "" };
+    setSelectedExercises(updated);
   };
 
   const updateExerciseEntry = (idx, field, value) => {
@@ -41,6 +51,11 @@ function CreateWorkout({ userId, onWorkoutCreated, onCancel }) {
 
   const removeExerciseEntry = (idx) => {
     setSelectedExercises(selectedExercises.filter((_, i) => i !== idx));
+  };
+
+  const getFilteredExercises = (muscleGroup) => {
+    if (!muscleGroup) return [];
+    return exercises.filter((ex) => ex.muscleGroup === muscleGroup);
   };
 
   const handleCreateWorkout = async (e) => {
@@ -125,19 +140,36 @@ function CreateWorkout({ userId, onWorkoutCreated, onCancel }) {
           ) : (
             <>
               {selectedExercises.map((entry, idx) => (
-                <div key={idx} className="exercise-entry">
-                  <div className="exercise-select">
+                <div key={idx} className="exercise-entry exercise-entry--dual">
+                  <div className="exercise-select exercise-select--dual">
+                    {/* Dropdown A: Muscle Group */}
+                    <select
+                      value={entry.muscleGroup || ""}
+                      onChange={(e) => handleUpdateMuscleGroup(idx, e.target.value)}
+                      disabled={loading}
+                      className="select-muscle-group"
+                    >
+                      <option value="">Select Muscle Group</option>
+                      {MUSCLE_GROUPS.map((mg) => (
+                        <option key={mg} value={mg}>{mg}</option>
+                      ))}
+                    </select>
+
+                    {/* Dropdown B: Exercise (dependent on Muscle Group) */}
                     <select
                       value={entry.exerciseId}
                       onChange={(e) =>
                         updateExerciseEntry(idx, "exerciseId", e.target.value)
                       }
-                      disabled={loading}
+                      disabled={loading || !entry.muscleGroup}
+                      className={!entry.muscleGroup ? "select-disabled" : ""}
                     >
-                      <option value="">Select Exercise</option>
-                      {exercises.map((ex) => (
+                      <option value="">
+                        {entry.muscleGroup ? "Select Exercise" : "— Pick muscle group first —"}
+                      </option>
+                      {getFilteredExercises(entry.muscleGroup).map((ex) => (
                         <option key={ex.id} value={ex.id}>
-                          {ex.name} ({ex.muscleGroup})
+                          {ex.name}
                         </option>
                       ))}
                     </select>
