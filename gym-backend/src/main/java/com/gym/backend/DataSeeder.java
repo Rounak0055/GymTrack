@@ -178,13 +178,16 @@ public class DataSeeder implements CommandLineRunner {
             addExercises(defaultExercises, "Shoulders",
                     "Machine Shoulder Press",
                     "Cable Lateral Raise",
-                    "Machine Lateral Raise");
+                    "Machine Lateral Raise",
+                    "Reverse Pec Deck",
+                    "Face Pull");
             addExercises(defaultExercises, "Biceps",
                     "Bayesian Cable Curl",
                     "Preacher Curl Machine",
                     "Cable Curl");
             addExercises(defaultExercises, "Triceps",
                     "Cable Pushdown",
+                    "Overhead Cable Extension",
                     "Rope Pushdown");
 
             exerciseRepository.saveAll(defaultExercises);
